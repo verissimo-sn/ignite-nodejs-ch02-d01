@@ -19,12 +19,6 @@ class UsersRepository implements IUsersRepository {
   }
 
   create({ name, email }: ICreateUserDTO): User {
-    const userAlreadyExists = this.users.some((user) => user.email === email);
-
-    if (userAlreadyExists) {
-      throw new Error(`User ${name} already exists`);
-    }
-
     const user = new User();
 
     Object.assign(user, {
@@ -40,19 +34,33 @@ class UsersRepository implements IUsersRepository {
   }
 
   findById(id: string): User | undefined {
-    // Complete aqui
+    const user = this.users.find((user) => user.id === id);
+
+    return user;
   }
 
   findByEmail(email: string): User | undefined {
-    // Complete aqui
+    const user = this.users.find((user) => user.email === email);
+
+    return user;
   }
 
   turnAdmin(receivedUser: User): User {
-    // Complete aqui
+    const user = this.users.find((user) => user.email === receivedUser.email);
+
+    const updatedUser = {
+      ...user,
+      admin: true,
+      updated_at: new Date(),
+    };
+
+    this.users = [...this.users, updatedUser];
+
+    return updatedUser;
   }
 
   list(): User[] {
-    // Complete aqui
+    return this.users;
   }
 }
 
